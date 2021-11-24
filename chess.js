@@ -78,13 +78,16 @@ function getRookMoves(rank,file,color) {
     for(let i = 0; i < slopes.length; i++) {
         let scale = 1;
         let move = {x:slopes[i].x+file, y:slopes[i].y+rank};
-        while(isOnBoard(move)&&!isOccupied(move,"w")) {
-
+        console.log(move);
+        while(isOnBoard(move)&&!isOccupied(move,"w")&&!isOccupied(move,"b")) {
+            scale+=1;
+            possibleMoves.push(move);
             move = {x:(scale*slopes[i].x)+file, y:(slopes[i].y*scale)+rank};
+            
         }
     }
     
-
+    return possibleMoves;
 
 }
 

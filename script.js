@@ -138,6 +138,9 @@ function determineCorrectMove(responses) {
         }
         console.log(possibleMoves);
         console.log(getResponse(possibleMoves[0]));
+        //Make move on the board
+        move = getMoveFromString(getResponse(possibleMoves[0]));
+        makeMove(move);
 }
 
 function getResponse(phrase) {

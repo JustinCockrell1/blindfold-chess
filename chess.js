@@ -2,20 +2,21 @@ const canvas = document.getElementById("board-canvas");
 const ctx = canvas.getContext("2d");
 
 let board = [
-    ["br","bn","bb","bq","bk","bb","bn","br"],
-    ["bp","bp","bp","bp","bp","bp","bp","bp"],
-    ["","","","","","","",""],
-    ["","","","","","","",""],
-    ["","","","","","","",""],
-    ["","","","","","","",""],
+    ["wr","wn","wb","wk","wq","wb","wn","wr"],
     ["wp","wp","wp","wp","wp","wp","wp","wp"],
-    ["wr","wn","wb","wq","wk","wb","wn","wr"],
+    ["","","","","","","",""],
+    ["","","","","","","",""],
+    ["","","","","","","",""],
+    ["","","","","","","",""],
+    ["bp","bp","bp","bp","bp","bp","bp","bp"],
+    ["br","bn","bb","bk","bq","bb","bn","br"],
+    
 ];
 
 let cellNum = 8;
 let cellSize = 600/cellNum;
 
-
+let currentColor = "w";
 
 
 function drawBoard() {
@@ -24,6 +25,9 @@ function drawBoard() {
             if(board[j][i]=="") ctx.fillStyle="red";
             else ctx.fillStyle="black";
             ctx.fillRect(i*cellSize, j*cellSize, cellSize, cellSize);
+            ctx.font = "20px Georgia";
+            ctx.fillStyle="white";
+            ctx.fillText(board[j][i], i*cellSize+cellSize/2, j*cellSize+cellSize/2);
         }
     }
 }
@@ -57,7 +61,7 @@ function getKnightMoves(rank,file, color) {
     ];
     let possibleMoves = [];
     for(let i = 0; i < moves.length; i++) {
-        move = {x: moves[i].x+file, y: moves[i].y+rank};
+        move = {x: moves[i].x+rank, y: moves[i].y+file};
         if(isOnBoard(move)) { //isOccupied might change
             possibleMoves.push(move);
             
@@ -68,6 +72,7 @@ function getKnightMoves(rank,file, color) {
 
 //Rooks moves
 function getRookMoves(rank,file,color) {
+    let enemyColor = color == 'w' ? 'b' : 'w';
     let slopes = [
         {x:1,y:0},
         {x:-1,y:0},
@@ -79,9 +84,13 @@ function getRookMoves(rank,file,color) {
         let scale = 1;
         let move = {x:slopes[i].x+file, y:slopes[i].y+rank};
         console.log(move);
-        while(isOnBoard(move)&&!isOccupied(move,"w")&&!isOccupied(move,"b")) {
+        while(isOnBoard(move)) {
             scale+=1;
+            if(isOccupied(move,enemyColor)) break;
+            if(isOccupied(move,color)) {
             possibleMoves.push(move);
+            break;
+            }
             move = {x:(scale*slopes[i].x)+file, y:(slopes[i].y*scale)+rank};
             
         }
@@ -92,10 +101,46 @@ function getRookMoves(rank,file,color) {
 }
 
 //Bishops moves
+function getBishopMoves(rank,file,color) {
+    let enemyColor = color == 'w' ? 'b' : 'w';
+    let slopes = [
+        {x:1,y:1},
+        {x:-1,y:1},
+        {x:1,y:-1},
+        {x:-1,y:-1}
+    ]
+    let possibleMoves = [];
+    for(let i = 0; i < slopes.length; i++) {
+        let scale = 1;
+        let move = {x:slopes[i].x+rank, y:slopes[i].y+file};
+        console.log(move);
+        while(isOnBoard(move)) {
+            scale+=1;
+            if(isOccupied(move,enemyColor)) break;
+            if(isOccupied(move,color)) {
+            possibleMoves.push(move);
+            break;
+            }
+            move = {x:(scale*slopes[i].x)+rank, y:(slopes[i].y*scale)+file};
+            
+        }
+    }
+    
+    return possibleMoves;
+
+}
 
 //Kings Moves
 
 //Pawns moves
+function getPawnMoves(rank,file,color) {
+    let possibleMoves = [];
+    let dir = 1;
+    if(color=="w") dir=-1;
+    possibleMoves.push({x:rank,y:file+1*dir});
+    possibleMoves.push({x:rank,y:file+2*dir});
+    return possibleMoves;
+}
 
 //Queens Moves
 
@@ -105,12 +150,12 @@ function getMoveFromString(s) {
     let move;
     if(s.length==2) {
         file=parseInt(s.charAt(1))-1;
-        rank = s.charCodeAt(0)-97; //converts from a to 0, e to 4, etc...
+        rank = 7-(s.charCodeAt(0)-97); //converts from a to 0, e to 4, etc...
         move = {x:rank,y:file,piece:"p"};
     }
     else if(s.length==3){
         file=parseInt(s.charAt(2))-1;
-        rank = s.charCodeAt(1)-97; //converts from a to 0, e to 4, etc...
+        rank = 7-(s.charCodeAt(1)-97); //converts from a to 0, e to 4, etc...
         piece = s.charAt(0);
         move = {x:rank,y:file,piece:piece};
     }
@@ -122,31 +167,41 @@ function getMoveFromString(s) {
 //Make a move given a coordinate and a piece symbol
 function makeMove(move) {
     if(move.piece=="n") {
-     possibleSquares = getKnightMoves(move.x,move.y,"w");
+     possibleSquares = getKnightMoves(move.x,move.y,currentColor);
      console.log(possibleSquares);
     }
     else if(move.piece=="b") {
-
+        possibleSquares = getBishopMoves(move.x,move.y,currentColor);
+        console.log("Possible Squars:");
+        console.log(possibleSquares);
     }
     else if(move.piece=="k") {
 
     }
     else if(move.piece=="r") {
-
+        possibleSquares = getRookMoves(move.x,move.y,currentColor);
+        console.log(possibleSquares);
     }
     else if(move.piece=="p") {
-
+        possibleSquares = getPawnMoves(move.x,move.y,currentColor);
+        console.log(possibleSquares);
     }
     else if(move.piece=="q") {
 
     }
 
     for(let i = 0; i < possibleSquares.length; i++){
-        if(board[possibleSquares[i].x][possibleSquares[i].y].charAt(1)==move.piece) {
+        if(board[possibleSquares[i].y][possibleSquares[i].x].charAt(1)==move.piece) {
             console.log(possibleSquares[i]);
+            board[possibleSquares[i].y][possibleSquares[i].x]="";
+            board[move.y][move.x]=currentColor+move.piece;
+            console.log(board);
+            drawBoard();
         }
     }
 
+
+    currentColor = currentColor == "w" ? "b" : "w";
 }
 
 

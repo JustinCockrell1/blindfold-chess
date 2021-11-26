@@ -19,6 +19,7 @@ allPieces = [
     "pawn",
     "king",
     "queen"
+    ,"pawn"
 ]
 
 pieces = [
@@ -41,5 +42,9 @@ pieces = [
     {
         name:["king"],
         symbol:"k"
+    },
+    {
+        name:["pawn","pain"],
+        symbol:"p"
     }
 ]

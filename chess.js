@@ -62,7 +62,7 @@ function getKnightMoves(rank,file, color) {
     let possibleMoves = [];
     for(let i = 0; i < moves.length; i++) {
         move = {x: moves[i].x+rank, y: moves[i].y+file};
-        if(isOnBoard(move)) { //isOccupied might change
+        if(isOnBoard(move) && isOccupied(move,color)) { //isOccupied might change
             possibleMoves.push(move);
             
         }
@@ -82,7 +82,7 @@ function getRookMoves(rank,file,color) {
     let possibleMoves = [];
     for(let i = 0; i < slopes.length; i++) {
         let scale = 1;
-        let move = {x:slopes[i].x+file, y:slopes[i].y+rank};
+        let move = {x:slopes[i].x+rank, y:slopes[i].y+file};
         console.log(move);
         while(isOnBoard(move)) {
             scale+=1;
@@ -91,7 +91,7 @@ function getRookMoves(rank,file,color) {
             possibleMoves.push(move);
             break;
             }
-            move = {x:(scale*slopes[i].x)+file, y:(slopes[i].y*scale)+rank};
+            move = {x:(scale*slopes[i].x)+rank, y:(slopes[i].y*scale)+file};
             
         }
     }
@@ -131,6 +131,20 @@ function getBishopMoves(rank,file,color) {
 }
 
 //Kings Moves
+function getKingMoves(rank,file,color){
+    let possibleMoves = [];
+    for(let i = rank-1; i < rank+2; i++){
+        for(let j = file-1; j<file+2; j++){
+            if(j!=file||i!=rank){
+                let move = {x:i, y:j};
+                if(isOnBoard(move)) {
+                if(isOccupied(move,color))possibleMoves.push(move);
+                }
+            }
+        }
+    }
+    return possibleMoves;
+}
 
 //Pawns moves
 function getPawnMoves(rank,file,color) {
@@ -172,11 +186,13 @@ function makeMove(move) {
     }
     else if(move.piece=="b") {
         possibleSquares = getBishopMoves(move.x,move.y,currentColor);
-        console.log("Possible Squars:");
+        console.log("Possible Squares:");
         console.log(possibleSquares);
     }
     else if(move.piece=="k") {
-
+        possibleSquares = getKingMoves(move.x,move.y,currentColor);
+        console.log("Possible Squares");
+        console.log(possibleSquares);
     }
     else if(move.piece=="r") {
         possibleSquares = getRookMoves(move.x,move.y,currentColor);
@@ -187,21 +203,24 @@ function makeMove(move) {
         console.log(possibleSquares);
     }
     else if(move.piece=="q") {
-
+        possibleSquares = getRookMoves(move.x,move.y,currentColor);
+        possibleSquares = possibleSquares.concat(getBishopMoves(move.x,move.y,currentColor));
+        console.log(possibleSquares);
     }
-
+console.log("length" + possibleSquares.length);
     for(let i = 0; i < possibleSquares.length; i++){
         if(board[possibleSquares[i].y][possibleSquares[i].x].charAt(1)==move.piece) {
             console.log(possibleSquares[i]);
             board[possibleSquares[i].y][possibleSquares[i].x]="";
             board[move.y][move.x]=currentColor+move.piece;
+            currentColor = currentColor == "w" ? "b" : "w";
             console.log(board);
             drawBoard();
         }
     }
 
 
-    currentColor = currentColor == "w" ? "b" : "w";
+    
 }
 
 

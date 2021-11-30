@@ -18,21 +18,56 @@ let cellSize = 600/cellNum;
 
 let currentColor = "w";
 
+let textures = {};
+
+textures["bb"] = new Image();
+textures["bn"] = new Image();
+textures["br"] = new Image();
+textures["bq"] = new Image();
+textures["bk"] = new Image();
+textures["bp"] = new Image();
+textures["wb"] = new Image();
+textures["wn"] = new Image();
+textures["wr"] = new Image();
+textures["wq"] = new Image();
+textures["wk"] = new Image();
+textures["wp"] = new Image();
+textures["bb"].src="images/bb.png";
+textures["bn"].src="images/bn.png";
+textures["br"].src="images/br.png";
+textures["bk"].src="images/bk.png";
+textures["bq"].src="images/bq.png";
+textures["bp"].src="images/bp.png";
+textures["wb"].src="images/wb.png";
+textures["wn"].src="images/wn.png";
+textures["wr"].src="images/wr.png";
+textures["wk"].src="images/wk.png";
+textures["wq"].src="images/wq.png";
+textures["wp"].src="images/wp.png";
+
+const lightSquare = new Image();
+const darkSquare = new Image();
+lightSquare.src="images/light1.png";
+darkSquare.src="images/dark1.png";
 
 function drawBoard() {
+    let count = 0;
     for(let i = 0; i < cellNum; i++) {
         for(let j = 0; j < cellNum; j++){
-            if(board[j][i]=="") ctx.fillStyle="red";
-            else ctx.fillStyle="black";
-            ctx.fillRect(i*cellSize, j*cellSize, cellSize, cellSize);
-            ctx.font = "20px Georgia";
-            ctx.fillStyle="white";
-            ctx.fillText(board[j][i], i*cellSize+cellSize/2, j*cellSize+cellSize/2);
+            if(count%2==0)
+            ctx.drawImage(lightSquare,i*cellSize,j*cellSize,cellSize,cellSize);
+            else
+            ctx.drawImage(darkSquare,i*cellSize,j*cellSize,cellSize,cellSize);
+            if(board[j][i]!="")
+            ctx.drawImage(textures[board[j][i]], i*cellSize+cellSize/10,j*cellSize+cellSize/10,cellSize*.8,cellSize*.8);
+            count++;
         }
+        count++;
     }
+
 }
 
-drawBoard();
+//drawBoard();
 
 
 //checks if a coordinate is on the 8x8 grid
@@ -223,6 +258,9 @@ console.log("length" + possibleSquares.length);
     
 }
 
+window.onload = function(){
+    drawBoard();
+}
 
 
 //Click event listener

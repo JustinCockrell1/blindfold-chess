@@ -44,10 +44,10 @@ if (speechRecognition && speechSynthesis) {
 
         //Stop speech recognition
     recognition.addEventListener("end",()=>{
-        micBtn.classList.replace("fa-microphone-slash", "fa-microphone");
-        instruction.textContent="Press Ctrl + X or Click the Mic icon to start";
-        instruction.focus();
-        console.log("Speech Recognition Ended");
+        // micBtn.classList.replace("fa-microphone-slash", "fa-microphone");
+        // instruction.textContent="Press Ctrl + X or Click the Mic icon to start";
+        // instruction.focus();
+        // console.log("Speech Recognition Ended");
         recognition.start();
     });
 

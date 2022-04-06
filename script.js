@@ -23,21 +23,21 @@ if (speechRecognition && speechSynthesis) {
     // console.log("Speech recognition and synthesis supported");
 
 
-    micBtn.addEventListener("click",micBtnClicked);
-    function micBtnClicked(e) {
-        e.preventDefault();
-        if(micBtn.classList.contains("fa-microphone")) {
-            recognition.start();
-        } else {
-            recognition.stop();
-        }
-    }
+    // micBtn.addEventListener("click",micBtnClicked);
+    // function micBtnClicked(e) {
+    //     e.preventDefault();
+    //     if(micBtn.classList.contains("fa-microphone")) {
+    //         recognition.start();
+    //     } else {
+    //         recognition.stop();
+    //     }
+    // }
 
     //Start speech recognition
     recognition.addEventListener("start",()=>{
-        micBtn.classList.replace("fa-microphone", "fa-microphone-slash");
-        instruction.textContent="Recording... Press Ctrl + M to stop";
-        searchInput.focus();
+        // micBtn.classList.replace("fa-microphone", "fa-microphone-slash");
+        // instruction.textContent="Recording... Press Ctrl + M to stop";
+        // searchInput.focus();
         // console.log("Speech Recognition Started");
     });
 
@@ -47,6 +47,7 @@ if (speechRecognition && speechSynthesis) {
         instruction.textContent="Press Ctrl + X or Click the Mic icon to start";
         instruction.focus();
         console.log("Speech Recognition Ended");
+        recognition.start();
     });
 
     recognition.continuous = true; //Makes it so it keeps listening
@@ -57,6 +58,7 @@ if (speechRecognition && speechSynthesis) {
     // },3000);
 
     //Add keyboard Event Listener
+    recognition.start();
     speechRecognitionKeys();
     loadTranscript();
 }
@@ -184,21 +186,21 @@ function respond(transcript) {
 
 //Show Transcript
 function showTranscript(transcript) {
-    if(transcript.toLowerCase().trim() === "stop recording")
-    {
-        recognition.stop();
-    }
-    else if(!searchInput.value) {
-        searchInput.value=transcript;
-    }
-    else {
-        if(transcript.toLowerCase().trim()==="search") {
-            searchForm.submit();
-        }
-        else if(transcript.toLowerCase().trim()==="reset form") {
-            searchInput.value = "";
-        } else {
-            searchInput.value=transcript;
-        }
-    }
+    // if(transcript.toLowerCase().trim() === "stop recording")
+    // {
+    //     recognition.stop();
+    // }
+    // else if(!searchInput.value) {
+    //     searchInput.value=transcript;
+    // }
+    // else {
+    //     if(transcript.toLowerCase().trim()==="search") {
+    //         searchForm.submit();
+    //     }
+    //     else if(transcript.toLowerCase().trim()==="reset form") {
+    //         searchInput.value = "";
+    //     } else {
+    //         searchInput.value=transcript;
+    //     }
+    // }
 }

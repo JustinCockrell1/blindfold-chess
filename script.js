@@ -35,7 +35,7 @@ if (speechRecognition && speechSynthesis) {
 
     //Start speech recognition
     recognition.addEventListener("start",()=>{
-        alert("starting");
+        //alert("starting");
         // micBtn.classList.replace("fa-microphone", "fa-microphone-slash");
         // instruction.textContent="Recording... Press Ctrl + M to stop";
         // searchInput.focus();

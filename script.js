@@ -35,6 +35,7 @@ if (speechRecognition && speechSynthesis) {
 
     //Start speech recognition
     recognition.addEventListener("start",()=>{
+        alert("starting");
         // micBtn.classList.replace("fa-microphone", "fa-microphone-slash");
         // instruction.textContent="Recording... Press Ctrl + M to stop";
         // searchInput.focus();
@@ -59,10 +60,11 @@ if (speechRecognition && speechSynthesis) {
 
     //Add keyboard Event Listener
     recognition.start();
-    speechRecognitionKeys();
+    // speechRecognitionKeys();
     loadTranscript();
 }
 else {
+    alert("not supported");
     console.log("Speech recognition and synthesis not supported");
     speechBtnDiv.style.visibility = "hidden";
 }

@@ -1,6 +1,17 @@
 const canvas = document.getElementById("board-canvas");
 const ctx = canvas.getContext("2d");
 
+
+if(window.innerHeight<window.innerWidth) {
+ctx.canvas.width = window.innerHeight-100;
+ctx.canvas.height = window.innerHeight-100;
+}
+else {
+    ctx.canvas.width = window.innerWidth;
+    ctx.canvas.height = window.innerWidth;
+}
+
+
 let board = [
     ["wr","wn","wb","wk","wq","wb","wn","wr"],
     ["wp","wp","wp","wp","wp","wp","wp","wp"],
@@ -14,7 +25,7 @@ let board = [
 ];
 
 let cellNum = 8;
-let cellSize = 600/cellNum;
+let cellSize = ctx.canvas.width/cellNum;
 
 let currentColor = "w";
 
@@ -49,6 +60,13 @@ const lightSquare = new Image();
 const darkSquare = new Image();
 lightSquare.src="images/light1.png";
 darkSquare.src="images/dark1.png";
+
+
+
+
+
+
+
 
 function drawBoard() {
     let count = 0;
